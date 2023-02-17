@@ -58,26 +58,18 @@ class QuizTest extends TestCase
             new Question('Who is my savior?', 'Jesus')
         );
 
-        $grade = $quiz->grade();
-        $this->assertEquals(0, $grade);
+        $this->expectException(\Exception::class);
+        $quiz->grade();
     }
 
     /** @test */
     public function it_correctly_tracks_the_next_question_in_the_queue()
     {
         $quiz = new Quiz;
-        $quiz->addQuestion(
-            new Question('Who is my savior?', 'Jesus')
-        );
+        $quiz->addQuestion($question1 = new Question('Who is my savior?', 'Jesus'));
+        $quiz->addQuestion($question2 = new Question('Who is my wife?', 'Aline'));
 
-        $question = $quiz->nextQuestion();
-        $this->assertSame('Who is my savior?', $question->getBody());
-
-        $quiz->addQuestion(
-            new Question('Who is my wife?', 'Aline')
-        );
-
-        $question = $quiz->nextQuestion();
-        $this->assertSame('Who is my wife?', $question->getBody());
+        $this->assertSame($question1, $quiz->nextQuestion());
+        $this->assertSame($question2, $quiz->nextQuestion());
     }
 }

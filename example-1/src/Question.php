@@ -21,6 +21,11 @@ class Question
         return $this->correct = $answer === $this->solution;
     }
 
+    public function answered(): bool
+    {
+        return isset($this->answer);
+    }
+
     public function solved(): ?string
     {
         return $this->correct ?? null;

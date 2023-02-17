@@ -22,8 +22,24 @@ class Quiz
         return $this->questions[++$this->pointer];
     }
 
+    public function isComplete(): bool
+    {
+        $answeredQuestions = count(
+            array_filter(
+                $this->questions,
+                static fn(Question $question) => $question->answered()
+            )
+        );
+        $totalQuestions = count($this->questions);
+        return $answeredQuestions === $totalQuestions;
+    }
+
     public function grade()
     {
+        if (! $this->isComplete()) {
+            throw new \Exception('Quiz is not complete');
+        }
+
         $correct = count($this->correctlyAnsweredQuestions());
         return ($correct / count($this->questions)) * 100;
     }
