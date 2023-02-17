@@ -6,14 +6,36 @@ use PHPUnit\Framework\TestCase;
 
 class TagParserTest extends TestCase
 {
-    protected TagParser $parser;
+//    protected TagParser $parser;
+//
+//    protected function setUp(): void
+//    {
+//        $this->parser = new TagParser();
+//    }
 
-    protected function setUp(): void
+    /**
+     * @dataProvider tagsProvider
+     */
+    public function test_it_parses_tags($input, $expected)
     {
-        $this->parser = new TagParser();
+        $parser = new TagParser();
+        $result = $parser->parse($input);
+        $this->assertSame($expected, $result);
     }
 
-    // personal, money, family
+    public static function tagsProvider()
+    {
+        return [
+            ['personal', ['personal']],
+            ['personal, money, family', ['personal', 'money', 'family']],
+            ['personal,money,family', ['personal', 'money', 'family']],
+            ['personal | money | family', ['personal', 'money', 'family']],
+            ['personal|money|family', ['personal', 'money', 'family']],
+            ['personal!money!family', ['personal', 'money', 'family']],
+        ];
+    }
+
+    /*
     public function test_it_parses_a_single_tag()
     {
         // Given - Arrange
@@ -66,4 +88,5 @@ class TagParserTest extends TestCase
 
         $this->assertSame($expected, $result);
     }
+    */
 }
