@@ -72,4 +72,13 @@ class QuizTest extends TestCase
         $this->assertSame($question1, $quiz->nextQuestion());
         $this->assertSame($question2, $quiz->nextQuestion());
     }
+
+    /** @test */
+    public function it_return_falses_if_there_are_not_remaining_next_questions()
+    {
+        $quiz = new Quiz;
+        $quiz->addQuestion($question1 = new Question('Who is my savior?', 'Jesus'));
+        $quiz->nextQuestion();
+        $this->assertFalse($quiz->nextQuestion());
+    }
 }

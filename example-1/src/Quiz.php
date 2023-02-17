@@ -5,7 +5,7 @@ namespace App;
 class Quiz
 {
     protected array $questions;
-    protected int $pointer = -1;
+    protected int $currentQuestion = 1;
 
     public function addQuestion(Question $question)
     {
@@ -17,9 +17,15 @@ class Quiz
         return $this->questions;
     }
 
-    public function nextQuestion(): Question
+    public function nextQuestion()
     {
-        return $this->questions[++$this->pointer];
+        if (!isset($this->questions[$this->currentQuestion - 1])) {
+            return false;
+        }
+
+        $question = $this->questions[$this->currentQuestion - 1];
+        $this->currentQuestion++;
+        return $question;
     }
 
     public function isComplete(): bool
