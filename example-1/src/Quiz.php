@@ -4,12 +4,18 @@ namespace App;
 
 class Quiz
 {
-    protected array $questions;
+    protected Questions $questions;
     protected int $currentQuestion = 1;
+
+    public function __construct()
+    {
+        $this->questions = new Questions();
+    }
 
     public function addQuestion(Question $question)
     {
-        $this->questions[] = $question;
+//        $this->questions[] = $question;
+        $this->questions->add($question);
     }
 
     public function questions()
@@ -19,23 +25,20 @@ class Quiz
 
     public function nextQuestion()
     {
-        if (!isset($this->questions[$this->currentQuestion - 1])) {
-            return false;
-        }
+//        if (!isset($this->questions[$this->currentQuestion - 1])) {
+//            return false;
+//        }
+//
+//        $question = $this->questions[$this->currentQuestion - 1];
+//        $this->currentQuestion++;
+//        return $question;
+        return $this->questions->next();
 
-        $question = $this->questions[$this->currentQuestion - 1];
-        $this->currentQuestion++;
-        return $question;
     }
 
     public function isComplete(): bool
     {
-        $answeredQuestions = count(
-            array_filter(
-                $this->questions,
-                static fn(Question $question) => $question->answered()
-            )
-        );
+        $answeredQuestions = count($this->questions->answered());
         $totalQuestions = count($this->questions);
         return $answeredQuestions === $totalQuestions;
     }
@@ -52,8 +55,6 @@ class Quiz
 
     protected function correctlyAnsweredQuestions()
     {
-        return array_filter(
-            $this->questions,
-            static fn(Question $question) => $question->solved());
+        return $this->questions->solved();
     }
 }
