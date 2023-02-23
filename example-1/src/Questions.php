@@ -5,7 +5,6 @@ namespace App;
 class Questions implements \Countable
 {
     protected array $questions;
-    protected int $current = 0;
 
     public function __construct($questions = [])
     {
@@ -24,24 +23,27 @@ class Questions implements \Countable
 
     public function next()
     {
-        if (!isset($this->questions[$this->current])) {
-            return false;
-        }
+        $question = current($this->questions);
+        next($this->questions);
+        return $question;
+    }
 
-        $this->current++;
-        return $this->questions[$this->current - 1];
+    public function remaining()
+    {
+        return array_filter($this->questions, static fn($q) => !$q->answered());
     }
 
     public function answered()
     {
         return array_filter(
             $this->questions,
-            static fn(Question $question) => $question->answered()
-        );
+            static fn($q) => $q->answered());
     }
 
     public function solved()
     {
+        // video https://laracasts.com/series/php-testing-jargon/episodes/7
+        // 12:19
         return array_filter(
             $this->questions,
             static fn(Question $question) => $question->solved()
