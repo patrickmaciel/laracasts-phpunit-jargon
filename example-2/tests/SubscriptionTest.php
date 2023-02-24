@@ -2,8 +2,10 @@
 
 namespace Tests;
 
+use App\Gateway;
 use App\Subscription;
 use App\User;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class SubscriptionTest extends TestCase
@@ -14,11 +16,12 @@ class SubscriptionTest extends TestCase
         $this->markTestSkipped();
     }
 
-    /** @test */
+    /** @test
+     * @throws Exception
+     */
     function creating_a_abuscription_marks_the_user_as_subscribed()
     {
-        $gateway = new FakeGateway(); // Mocking the gateway
-        $subscription = new Subscription($gateway);
+        $subscription = new Subscription($this->createMock(Gateway::class));
         $user = new User('Jesus');
         $this->assertFalse($user->isSubscribed());
 
