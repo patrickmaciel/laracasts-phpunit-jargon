@@ -18,7 +18,7 @@ class Question
     public function answer(string $answer)
     {
         $this->answer = $answer;
-        return $this->correct = $answer === $this->solution;
+        return $this->solved();
     }
 
     public function answered(): bool
@@ -28,7 +28,7 @@ class Question
 
     public function solved(): ?string
     {
-        return $this->correct ?? null;
+        return $this->answer === $this->solution;
     }
 
     public function getBody(): string

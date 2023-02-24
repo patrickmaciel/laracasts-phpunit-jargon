@@ -8,86 +8,86 @@ use PHPUnit\Framework\TestCase;
 
 class QuizTest extends TestCase
 {
+    protected Quiz $quiz;
+
+    protected function setUp(): void
+    {
+        $this->quiz = new Quiz();
+    }
+
     /** @test */
     public function it_consists_of_questions()
     {
-        $quiz = new Quiz();
-        $quiz->addQuestion(
+        $this->quiz->addQuestion(
             new Question('What is 2 + 2?', 4)
         );
-        $this->asserTcount(1, $quiz->questions());
+        $this->asserTcount(1, $this->quiz->questions());
     }
 
     /** @test */
     public function it_grades_a_perfect_quiz()
     {
-        $quiz = new Quiz();
-        $quiz->addQuestion(
+        $this->quiz->addQuestion(
             new Question('What is 2 + 2?', 4)
         );
 
         // take the quiz
-        $question = $quiz->nextQuestion();
+        $question = $this->quiz->nextQuestion();
         $question->answer(4);
 
         // grade the quiz
-        $this->assertEquals(100, $quiz->grade());
+        $this->assertEquals(100, $this->quiz->grade());
     }
 
     /** @test */
     public function it_grades_a_failed_quiz()
     {
-        $quiz = new Quiz();
-        $quiz->addQuestion(
+        $this->quiz->addQuestion(
             new Question('What is 2 + 2?', 4)
         );
 
         // take the quiz
-        $question = $quiz->nextQuestion();
+        $question = $this->quiz->nextQuestion();
         $question->answer('incorrect answer');
 
         // grade the quiz
-        $this->assertEquals(0, $quiz->grade());
+        $this->assertEquals(0, $this->quiz->grade());
     }
 
     /** @test */
     public function it_cannot_be_graded_until_all_questions_have_been_answered()
     {
-        $quiz = new Quiz;
-        $quiz->addQuestion(
+        $this->quiz->addQuestion(
             new Question('Who is my savior?', 'Jesus')
         );
 
         $this->expectException(\Exception::class);
-        $quiz->grade();
+        $this->quiz->grade();
     }
 
     /** @test */
     public function it_correctly_tracks_the_next_question_in_the_queue()
     {
-        $quiz = new Quiz;
-        $quiz->addQuestion($question1 = new Question('Who is my savior?', 'Jesus'));
-        $quiz->addQuestion($question2 = new Question('Who is my wife?', 'Aline'));
+        $this->quiz->addQuestion($question1 = new Question('Who is my savior?', 'Jesus'));
+        $this->quiz->addQuestion($question2 = new Question('Who is my wife?', 'Aline'));
 
-        $this->assertSame($question1, $quiz->nextQuestion());
-        $this->assertSame($question2, $quiz->nextQuestion());
+        $this->assertSame($question1, $this->quiz->nextQuestion());
+        $this->assertSame($question2, $this->quiz->nextQuestion());
     }
 
     /** @test */
     public function it_return_falses_if_there_are_not_remaining_next_questions()
     {
-        $quiz = new Quiz;
-        $quiz->addQuestion($question1 = new Question('Who is my savior?', 'Jesus'));
-        $quiz->nextQuestion();
-        $this->assertFalse($quiz->nextQuestion());
+        $this->quiz->addQuestion($question1 = new Question('Who is my savior?', 'Jesus'));
+        $this->quiz->nextQuestion();
+        $this->assertFalse($this->quiz->nextQuestion());
     }
 
     public function it_knows_if_its_complete()
     {
-        $quiz = new Quiz;
-        $quiz->addQuestion(new Question('What is 2+2', 4));
-        $this->assertFalse($quiz->isComplete());
-        $quiz->nextQuestion()->answer(4);
-        $this->assertTrue($quiz->isComplete());
+        $this->quiz->addQuestion(new Question('What is 2+2', 4));
+        $this->assertFalse($this->quiz->isComplete());
+        $this->quiz->nextQuestion()->answer(4);
+        $this->assertTrue($this->quiz->isComplete());
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Exception;
+
 class Quiz
 {
     protected Questions $questions;
@@ -38,19 +40,17 @@ class Quiz
 
     public function isComplete(): bool
     {
-        $answeredQuestions = count($this->questions->answered());
-        $totalQuestions = count($this->questions);
-        return $answeredQuestions === $totalQuestions;
+        return count($this->questions->answered()) === $this->questions()->count();
     }
 
     public function grade()
     {
         if (! $this->isComplete()) {
-            throw new \Exception('Quiz is not complete');
+            throw new Exception('Quiz is not complete');
         }
 
         $correct = count($this->correctlyAnsweredQuestions());
-        return ($correct / count($this->questions)) * 100;
+        return ($correct / $this->questions->count()) * 100;
     }
 
     protected function correctlyAnsweredQuestions()
