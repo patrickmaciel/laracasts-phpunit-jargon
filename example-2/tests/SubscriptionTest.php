@@ -21,7 +21,11 @@ class SubscriptionTest extends TestCase
      */
     function creating_a_abuscription_marks_the_user_as_subscribed()
     {
-        $subscription = new Subscription($this->createMock(Gateway::class));
+        $gateway = $this->createMock(Gateway::class);
+        $gateway->method('create')->willReturn('receipt-stub');
+
+        $subscription = new Subscription($gateway);
+
         $user = new User('Jesus');
         $this->assertFalse($user->isSubscribed());
 

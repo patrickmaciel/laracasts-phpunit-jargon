@@ -14,7 +14,8 @@ class Subscription
     public function create(User $user)
     {
         // create the subscription through Stripe
-        $this->gateway->create();
+        $receipt = $this->gateway->create();
+        die(var_dump($receipt));
 
         // Update the local user record
         $user->markAsSubscribed();
